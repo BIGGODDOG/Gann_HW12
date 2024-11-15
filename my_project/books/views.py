@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Book
 from .serializers import BookSerializer
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ModelViewSet
 
 class BookAPIView(APIView):
     def get(self, request):
@@ -47,3 +49,18 @@ class BookDetailAPIView(APIView):
             return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
         book.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class BookListCreateView(ListCreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class BookDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class BookViewSet(ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
